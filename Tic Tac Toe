@@ -1,0 +1,234 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <time.h>
+#include <string.h>
+
+char space[9];
+const char Player1 = 'X';
+const char Player2 = 'O';
+const char Computer = 'O';
+char s1[50] = "PLAYER";
+char s2[50] = "COMPUTER";
+char opponent[50];
+
+void display();
+void disboard();
+void player1turn();
+char checkwinner();
+int countFreespaces();
+void computermove();
+void printWinner(char);
+void player2turn();
+void partner();
+
+int main()
+{
+    char winner = ' ';
+    disboard();
+    char opponent[50];
+    partner();
+    return 0;
+}
+void disboard()
+{
+    for (int i = 0; i < 9; i++)
+    {
+        space[i] = ' ';
+    }
+}
+
+void display()
+{
+
+    system("cls");
+    printf("\n\tTic Tac Toe\n\n");
+
+    printf("Player(1)==>'X' & Player(2)==>'O' PLAYER / COMPUTER \n\n");
+
+    printf("\t     |      |   \n");
+    printf("\t  %c  |   %c  |  %c\n", space[0], space[1], space[2]);
+    printf("\t_____|______|_____\n");
+    printf("\t     |      |    \n");
+    printf("\t  %c  |   %c  |  %c\n", space[3], space[4], space[5]);
+    printf("\t_____|______|_____\n");
+    printf("\t     |      |    \n");
+    printf("\t  %c  |   %c  |  %c\n", space[6], space[7], space[8]);
+    printf("\t     |      |  \n");
+}
+
+int countFreespaces()
+{
+    int freespace = 9;
+    for (int i = 0; i < 9; i++)
+    {
+        if (space[i] != ' ')
+        {
+            freespace--;
+        }
+    }
+    return freespace;
+}
+
+void partner()
+{
+    char winner = ' ';
+    printf("Enter With whom you want to play PLAYER/COMPUTER\n");
+    gets(opponent);
+    if (strlen(opponent) == 6)
+    {
+        while (winner == ' ' && countFreespaces() != 0)
+        {
+            display();
+            player1turn();
+            winner = checkwinner();
+            if (winner != ' ' || countFreespaces() == 0)
+            {
+                break;
+            }
+            player2turn();
+            winner = checkwinner();
+            if (winner != ' ' || countFreespaces() == 0)
+            {
+                break;
+            }
+        }
+        display();
+        printWinner(winner);
+    }
+    if(strlen(opponent) == 8)
+    {
+        while (winner == ' ' && countFreespaces() != 0)
+        {
+            display();
+            player1turn();
+            winner = checkwinner();
+            if (winner != ' ' || countFreespaces() == 0)
+            {
+                break;
+            }
+            computermove();
+            winner = checkwinner();
+            if (winner != ' ' || countFreespaces() == 0)
+            {
+                break;
+            }
+        }
+        display();
+        printWinner(winner);
+    }
+}
+void player1turn()
+{
+    int x;
+    do
+    {
+        printf("Enter number  #(1-9):");
+        scanf("%d", &x);
+        x--;
+        if (space[x] != ' ')
+        {
+            printf("Invalid move!\n");
+        }
+        else
+        {
+            space[x] = Player1;
+            break;
+        }
+    } while (space[x] != ' ');
+}
+
+void player2turn()
+{
+    int y;
+    do
+    {
+        printf("Enter your choice  #(1-9):");
+        scanf("%d", &y);
+        y--;
+        if (space[y] != ' ')
+        {
+            printf("Invalid move!\n");
+        }
+        else
+        {
+            space[y] = Player2;
+            break;
+        }
+    } while (space[y] != ' ');
+}
+void computermove()
+{
+    srand(time(0));
+    int x;
+    if (countFreespaces() > 0)
+    {
+        do
+        {
+            x = rand() % 9;
+            x++;
+        } while (space[x] != ' ');
+        space[x] = Computer;
+    }
+    else
+    {
+        printWinner(' ');
+    }
+}
+char checkwinner()
+{
+
+    if (space[1] == space[2]  && space[1] == space[0])
+    {
+        return space[2];
+    }
+    else if (space[3] == space[4]  && space[4] == space[5])
+    {
+        return space[4];
+    }
+    else if (space[6] == space[7] && space[7] == space[8])
+    {
+        return space[7];
+    }
+    else if (space[6] == space[3]  && space[3] == space[0])
+    {
+        return space[3];
+    }
+    else if (space[1] == space[7]  && space[7] == space[4])
+    {
+        return space[7];
+    }
+    else if (space[2] == space[5]  && space[5] == space[8])
+    {
+        return space[5];
+    }
+    else if (space[8] == space[4] && space[4] == space[0])
+    {
+        return  space[4];
+    }
+    else if (space[2] == space[4] && space[4] == space[6])
+    {
+        return space[4];
+    }
+    return ' ';
+}
+void printWinner(char winner)
+{
+    if (winner == Player1)
+    {
+        printf("YOU WON");
+    }
+    else if (winner == Computer)
+    {
+        printf("YOU LOOSE");
+    }
+    else if (winner == Player2)
+    {
+        printf("YOU LOOSE");
+    }
+    else
+    {
+        printf("Draw");
+    }
+}
+
